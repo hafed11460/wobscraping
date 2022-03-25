@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    {% if is_paginated %}
+    <nav class="my-4" aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a> </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a> </li>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active"><a class="page-link"href="?page={{ num }}">{{ num }}</a></li>
+                {% elif num > page_obj.number|add:'-10' and num < page_obj.number|add:'10' %}
+                    <li class="page-item"><a class="page-link"href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link"href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link"href="?page={{ page_obj.paginator.num_pages }}">last</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-4">
+        {% if books %}
+            {% for book in books %}
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="{{ book.imageUrl}}" class="rounded"
+                        style="max-height: 250px; min-height: 250px; min-width:130px;   " alt="...">
+
+                        <div class="card-body py-1 mt-2 border-top">
+                            <a
+                            class="lh-sm  link-dark text-decoration-none "
+                                href="https://www.wob.com/en-gb/'{{ book.urlSlug }}">
+                                <p class="text-center text-bold">{{ book.title}}</p></a>
+                            <p class="mt-2 lh-sm text-center text-bold"
+                            style="font-size:14px;">By {{ book.author}}</p>
+                        </div>
+                        <div class="card-footer  bg-white border-0">
+                            <a class="btn btn-white text-info d-block text-bold fs-4">£ {{ book.price}}</a>
+                            <a class="btn btn-warning d-block text-white" target='blank' href="{{ book.origin_url}}">Add To Cart</a>
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {%else%}
+                <h2 class="mt-5"> No results </h2>
+        {%endif%}
+    </div>
+
+
+    {% if is_paginated %}
+        <nav class="my-4" aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">First</a> </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a> </li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active"><a class="page-link"href="?page={{ num }}">{{ num }}</a></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item"><a class="page-link"href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link"href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    <li class="page-item"><a class="page-link"href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock content %}
